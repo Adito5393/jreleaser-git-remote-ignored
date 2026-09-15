@@ -1,0 +1,5 @@
+[tools]
+java = "zulu-25"
+
+[env]
+_.file = ".env"

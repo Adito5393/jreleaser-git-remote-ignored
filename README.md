@@ -7,6 +7,20 @@ Minimal reproduction for a JReleaser Git remote tagging issue.
 
 See [`docs/reproduction.md`](docs/reproduction.md) for reproduction steps.
 
+## Git remotes
+
+```bash
+git clone git@github.com:Adito5393/jreleaser-git-remote-ignored.git
+# or: git clone https://github.com/Adito5393/jreleaser-git-remote-ignored.git
+cd jreleaser-git-remote-ignored
+
+git remote rename origin upstream
+git remote add jreleaser-https https://github.com/Adito5393/jreleaser-git-remote-ignored.git
+git remote add jreleaser-ssh git@github.com:Adito5393/jreleaser-git-remote-ignored.git
+```
+
+Skip a `git remote add` if that URL is already present after the clone. There must be no `origin` remote. Tagging still looks up `origin` and fails with `origin: not found.`
+
 ## Setup devenv using mise
 
 ```bash
@@ -35,6 +49,18 @@ source ~/.bashrc
 ```
 
 Dry run:
+
+```
+mise run jreleaser:dry-run
+```
+
+Full reproduction (creates a tag):
+
+```
+mise run jreleaser:release
+```
+
+## Without mise
 
 ```
 set -a

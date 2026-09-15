@@ -2,4 +2,46 @@
 java = "zulu-25"
 
 [env]
+JRELEASER_DEFAULT_GIT_REMOTE = "jreleaser-https"
+SOURCE_REPO_GITHUB_USERNAME = "JUST-PUT-SOME-CHARACTERS"
+SOURCE_REPO_GITHUB_TOKEN = "JUST-PUT-SOME-CHARACTERS"
+JRELEASER_TAG_NAME = "v0.1.0"
 _.file = ".env"
+
+[tasks."jreleaser:delete-tag"]
+hide = true
+description = "Delete the release tag if it already exists"
+run = '''
+tag="${JRELEASER_TAG_NAME:-v0.1.0}"
+if git show-ref --tags --quiet --verify "refs/tags/${tag}"; then
+  echo "Deleting existing local tag ${tag}"
+  git tag -d "${tag}"
+fi
+for remote in $(git remote); do
+  if git ls-remote --exit-code --tags "${remote}" "refs/tags/${tag}" >/dev/null 2>&1; then
+    echo "Deleting existing tag ${tag} from ${remote}"
+    git push "${remote}" --delete "${tag}"
+  fi
+done
+'''
+
+[tasks."jreleaser:release"]
+description = "Reproduce the JReleaser git remote tagging issue"
+depends = ["jreleaser:delete-tag"]
+run = '''
+./mvnw jreleaser:release \
+  -Djreleaser.github.username="${SOURCE_REPO_GITHUB_USERNAME}" \
+  -Djreleaser.github.token="${SOURCE_REPO_GITHUB_TOKEN}" \
+  -Djreleaser.upload.active=NEVER
+'''
+
+[tasks."jreleaser:dry-run"]
+description = "Dry-run jreleaser:release without creating a GitHub release"
+depends = ["jreleaser:delete-tag"]
+run = '''
+./mvnw jreleaser:release \
+  -Djreleaser.github.username="${SOURCE_REPO_GITHUB_USERNAME}" \
+  -Djreleaser.github.token="${SOURCE_REPO_GITHUB_TOKEN}" \
+  -Djreleaser.upload.active=NEVER \
+  -Djreleaser.dry.run=true
+'''

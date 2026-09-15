@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.github.adito5393</groupId>
+  <artifactId>jreleaser-git-remote-ignored</artifactId>
+  <version>0.1.0</version>
+  <name>jreleaser-git-remote-ignored</name>
+  <description>Minimal reproduction for the JReleaser git remote tagging issue.</description>
+  <inceptionYear>2026</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>25</maven.compiler.release>
+    <gitlab.release.tagName>v${project.version}</gitlab.release.tagName>
+    <jreleaser.github.token>dry-run</jreleaser.github.token>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jreleaser</groupId>
+        <artifactId>jreleaser-maven-plugin</artifactId>
+        <version>1.26.0</version>
+        <configuration>
+          <jreleaser>
+            <release>
+              <github>
+                <artifacts>false</artifacts>
+                <tagName>${gitlab.release.tagName}</tagName>
+                <skipTag>false</skipTag>
+                <skipRelease>true</skipRelease>
+                <uploadAssets>NEVER</uploadAssets>
+                <token>${jreleaser.github.token}</token>
+              </github>
+            </release>
+          </jreleaser>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

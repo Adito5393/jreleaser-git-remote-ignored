@@ -2,7 +2,7 @@
 
 Minimal reproduction for a JReleaser Git remote tagging issue.
 
-* Issue: [TODO](TODO)
+* Issue: [JRELEASER_DEFAULT_GIT_REMOTE ignored during tagging v2](https://github.com/jreleaser/jreleaser/issues/2170)
 * Related reference: [JRELEASER_DEFAULT_GIT_REMOTE ignored during tagging 1434](https://github.com/jreleaser/jreleaser/issues/1434)
 
 See [`docs/reproduction.md`](docs/reproduction.md) for reproduction steps.
